@@ -294,7 +294,7 @@ const App = (() => {
       const card = document.createElement('button');
       card.className = `mock-paper-card ${statusClass}`;
       card.innerHTML = `
-        <div class="mock-num">Q${paperNum}</div>
+        <div class="mock-num">Paper ${paperNum}</div>
         <div class="mock-status">${statusText}</div>
       `;
       card.addEventListener('click', () => {
