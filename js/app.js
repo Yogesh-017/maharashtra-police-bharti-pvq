@@ -213,18 +213,97 @@ const App = (() => {
 
   // --- Exam Type ---
   function initExamType() {
-    $$('.exam-type-card').forEach(card => {
+    $$('.exam-type-card[data-type]').forEach(card => {
       card.addEventListener('click', () => {
         state.examType = card.dataset.type;
         const examInfo = EXAM_TYPES.find(e => e.id === state.examType);
         if (examInfo && examInfo.hasDistricts) {
-          renderDistricts();
-          showScreen('district-screen');
+          // Show mode selection (Mock vs District)
+          showScreen('mode-screen');
         } else {
           renderYears();
           showScreen('year-screen');
         }
       });
+    });
+  }
+
+  // --- Mode Selection (Mock vs District) ---
+  function initModeSelection() {
+    $('#mode-mock')?.addEventListener('click', () => {
+      state.district = 'mock';
+      state.practiceMode = 'mock';
+      renderMockPapers();
+      showScreen('mock-screen');
+    });
+
+    $('#mode-district')?.addEventListener('click', () => {
+      state.practiceMode = 'district';
+      renderDistricts();
+      showScreen('district-screen');
+    });
+  }
+
+  // --- Mock Papers List ---
+  function renderMockPapers() {
+    const grid = $('#mock-papers-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    const papers = loadFromStorage('papers') || {};
+    const history = loadFromStorage('history') || [];
+
+    // Find all mock papers (keys like police_bharti_mock_1, police_bharti_mock_2, etc.)
+    const mockKeys = Object.keys(papers).filter(k => k.startsWith('police_bharti_mock_'));
+
+    if (mockKeys.length === 0) {
+      grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-secondary); padding:40px;">सध्या कोणतीही सराव चाचणी उपलब्ध नाही.<br>No mock tests available yet.</p>';
+      return;
+    }
+
+    // Sort by number
+    mockKeys.sort((a, b) => {
+      const numA = parseInt(a.split('_').pop()) || 0;
+      const numB = parseInt(b.split('_').pop()) || 0;
+      return numA - numB;
+    });
+
+    mockKeys.forEach((key, idx) => {
+      const paperNum = idx + 1;
+      const paper = papers[key];
+
+      // Check history for this paper
+      const attempts = history.filter(h => h.district === 'mock' && h.year === paper.year && h.examType === 'police_bharti');
+
+      let statusClass = 'unattempted';
+      let statusText = '❌ Not Attempted';
+      let scoreText = '';
+
+      if (attempts.length > 0) {
+        const bestAttempt = attempts.reduce((best, h) => (h.percentage || 0) > (best.percentage || 0) ? h : best, attempts[0]);
+        const pct = bestAttempt.percentage || 0;
+
+        if (pct >= 60) {
+          statusClass = 'completed';
+          statusText = `✅ ${pct}%`;
+        } else {
+          statusClass = 'partial';
+          statusText = `🟡 ${pct}%`;
+        }
+      }
+
+      const card = document.createElement('button');
+      card.className = `mock-paper-card ${statusClass}`;
+      card.innerHTML = `
+        <div class="mock-num">Q${paperNum}</div>
+        <div class="mock-status">${statusText}</div>
+      `;
+      card.addEventListener('click', () => {
+        state.year = paper.year || paperNum;
+        state.district = 'mock';
+        renderSections();
+        showScreen('section-screen');
+      });
+      grid.appendChild(card);
     });
   }
 
@@ -321,14 +400,24 @@ const App = (() => {
     const papers = loadFromStorage('papers') || {};
     const header = $('#year-screen-header');
     const districtInfo = DISTRICTS.find(d => d.id === state.district);
+    const isMock = state.practiceMode === 'mock';
+
     if (header) {
-      const backTarget = state.examType === 'srpf' ? 'examtype' : 'district';
-      header.innerHTML = `<button class="back-btn" data-back="${backTarget}" onclick="document.querySelector('.back-btn[data-back=${backTarget}]')?.click()">← मागे जा</button><h2>📅 वर्ष निवडा</h2><p>${districtInfo ? districtInfo.emoji + ' ' + districtInfo.name + ' — ' : ''}${state.examType === 'srpf' ? 'SRPF' : 'पोलीस भरती'}</p>`;
+      let backTarget = 'district';
+      if (state.examType === 'srpf') backTarget = 'examtype';
+      else if (isMock) backTarget = 'mode';
+
+      const subtitle = isMock
+        ? '📝 Mock Test — सराव चाचणी'
+        : (districtInfo ? districtInfo.emoji + ' ' + districtInfo.name + ' — ' : '') + (state.examType === 'srpf' ? 'SRPF' : 'पोलीस भरती');
+
+      header.innerHTML = `<button class="back-btn" data-back="${backTarget}">← मागे जा</button><h2>📅 वर्ष निवडा</h2><p>${subtitle}</p>`;
       // Attach back handler to the new button
       const backBtn = header.querySelector('.back-btn');
       if (backBtn) {
         backBtn.addEventListener('click', () => {
           if (backTarget === 'examtype') showScreen('examtype-screen');
+          else if (backTarget === 'mode') showScreen('mode-screen');
           else { renderDistricts(); showScreen('district-screen'); }
         });
       }
@@ -1165,6 +1254,7 @@ const App = (() => {
       btn.addEventListener('click', () => {
         const target = btn.dataset.back;
         if (target === 'examtype') showScreen('examtype-screen');
+        else if (target === 'mode') showScreen('mode-screen');
         else if (target === 'district') { renderDistricts(); showScreen('district-screen'); }
         else if (target === 'year') { renderYears(); showScreen('year-screen'); }
         else if (target === 'section') { renderSections(); showScreen('section-screen'); }
@@ -1199,6 +1289,7 @@ const App = (() => {
     initLanding();
     initAuth();
     initExamType();
+    initModeSelection();
     initDistricts();
     initSections();
     initQuizControls();
@@ -1252,6 +1343,19 @@ const App = (() => {
         }
       } catch (e) {
         console.error('Failed to preload test paper', e);
+      }
+    }
+    if (!papers['police_bharti_mock_1']) {
+      try {
+        const res = await fetch('mock_1.json');
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers['police_bharti_mock_1'] = mockPaper;
+          saveToStorage('papers', papers);
+          console.log('Mock paper 1 preloaded.');
+        }
+      } catch (e) {
+        console.error('Failed to preload mock paper', e);
       }
     }
   }
