@@ -1,10 +1,10 @@
 {
-    "id": "police_bharti_2025_01",
+    "id": "police_bharti_mock_6",
     "name": "Practice Paper 6",
-    "year": 2025,
+    "year": 6,
     "date": "10-03-2026",
     "examType": "police_bharti",
-    "district": "random",
+    "district": "mock",
     "totalQuestions": 100,
     "timeLimit": 90,
     "sections": [

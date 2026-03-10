@@ -1,10 +1,10 @@
 {
-    "id": "police_bharti_2025_08",
+    "id": "police_bharti_mock_4",
     "name": "mock paper 4",
-    "year": 2025,
+    "year": 4,
     "date": "10-03-2026",
     "examType": "police_bharti",
-    "district": "random",
+    "district": "mock",
     "totalQuestions": 100,
     "timeLimit": 90,
     "sections": [

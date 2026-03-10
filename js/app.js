@@ -1585,12 +1585,12 @@ const App = (() => {
         console.error('Failed to preload mock paper 3', e);
       }
     }
-    if (!papers['police_bharti_2025_08']) {
+    if (!papers['police_bharti_mock_4']) {
       try {
         const res = await fetch('mock_4.json');
         if (res.ok) {
           const mockPaper = await res.json();
-          papers['police_bharti_2025_08'] = mockPaper;
+          papers['police_bharti_mock_4'] = mockPaper;
           saveToStorage('papers', papers);
           console.log('Mock paper 4 preloaded.');
         }
@@ -1598,12 +1598,12 @@ const App = (() => {
         console.error('Failed to preload mock paper 4', e);
       }
     }
-    if (!papers['police_bharti_random_2026_10']) {
+    if (!papers['police_bharti_mock_5']) {
       try {
         const res = await fetch('mock_5.json');
         if (res.ok) {
           const mockPaper = await res.json();
-          papers['police_bharti_random_2026_10'] = mockPaper;
+          papers['police_bharti_mock_5'] = mockPaper;
           saveToStorage('papers', papers);
           console.log('Mock paper 5 preloaded.');
         }
@@ -1611,12 +1611,12 @@ const App = (() => {
         console.error('Failed to preload mock paper 5', e);
       }
     }
-    if (!papers['police_bharti_2025_01']) {
+    if (!papers['police_bharti_mock_6']) {
       try {
         const res = await fetch('mock_6.json');
         if (res.ok) {
           const mockPaper = await res.json();
-          papers['police_bharti_2025_01'] = mockPaper;
+          papers['police_bharti_mock_6'] = mockPaper;
           saveToStorage('papers', papers);
           console.log('Mock paper 6 preloaded.');
         }

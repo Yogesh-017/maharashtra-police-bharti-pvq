@@ -1,10 +1,10 @@
 {
-    "id": "police_bharti_random_2026_10",
-    "name": "Practice Mock Test No. 10",
-    "year": 2026,
+    "id": "police_bharti_mock_5",
+    "name": "Practice Mock Test No. 5",
+    "year": 5,
     "date": "10-03-2026",
     "examType": "police_bharti",
-    "district": "random",
+    "district": "mock",
     "totalQuestions": 100,
     "timeLimit": 90,
     "sections": [
