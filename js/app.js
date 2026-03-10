@@ -364,11 +364,74 @@ const App = (() => {
       card.addEventListener('click', () => {
         state.year = paper.year;
         state.district = 'ca';
-        renderSections();
-        showScreen('section-screen');
+        startCAReadMode(paper);
       });
       grid.appendChild(card);
     });
+  }
+
+  // --- Current Affairs Read Mode ---
+  function initCAReadMode() {
+    $('#ca-prev')?.addEventListener('click', () => {
+      if (state.caCurrentIndex > 0) {
+        state.caCurrentIndex--;
+        renderCACurrent();
+      }
+    });
+
+    $('#ca-next')?.addEventListener('click', () => {
+      if (state.caCurrentIndex < state.caQuestions.length - 1) {
+        state.caCurrentIndex++;
+        renderCACurrent();
+      }
+    });
+  }
+
+  function startCAReadMode(paper) {
+    state.caQuestions = [];
+    if (paper.sections) {
+      paper.sections.forEach(sec => {
+        state.caQuestions = state.caQuestions.concat(sec.questions || []);
+      });
+    }
+    state.caCurrentIndex = 0;
+
+    // Fallback if no questions
+    if (state.caQuestions.length === 0) {
+      toast('या पेपरमध्ये कोणतेही प्रश्न नाहीत.', 'error');
+      return;
+    }
+
+    const caDate = new Date(paper.timestamp || Date.now()).toLocaleDateString('mr-IN');
+    const dateEl = $('#ca-read-date');
+    if (dateEl) dateEl.innerText = `${caDate} | ${paper.name || 'चालू घडामोडी'}`;
+
+    renderCACurrent();
+    showScreen('ca-read-screen');
+  }
+
+  function renderCACurrent() {
+    const q = state.caQuestions[state.caCurrentIndex];
+    if (!q) return;
+
+    let ansText = q.answer || q.correct || '';
+    // Simplify answer text if it starts with option letters
+    ansText = ansText.replace(/^[A-D]\s—\s/, '');
+
+    $('#ca-read-content').innerHTML = `
+      <div style="color:var(--text-primary); margin-bottom:20px; font-weight:bold;">प्रश्न ${state.caCurrentIndex + 1}: ${q.text}</div>
+      <div style="color:var(--success); background:rgba(76,175,80,0.1); padding:15px; border-radius:8px; border-left:4px solid var(--success);">
+        <strong>उत्तर:</strong> ${ansText}
+      </div>
+    `;
+
+    const progEl = $('#ca-progress');
+    if (progEl) progEl.innerText = `${state.caCurrentIndex + 1} / ${state.caQuestions.length}`;
+
+    const prevBtn = $('#ca-prev');
+    const nextBtn = $('#ca-next');
+    if (prevBtn) prevBtn.style.visibility = state.caCurrentIndex > 0 ? 'visible' : 'hidden';
+    if (nextBtn) nextBtn.style.visibility = state.caCurrentIndex < state.caQuestions.length - 1 ? 'visible' : 'hidden';
   }
 
   // --- Districts ---
@@ -1431,6 +1494,7 @@ const App = (() => {
     initAuth();
     initExamType();
     initModeSelection();
+    initCAReadMode();
     initDistricts();
     initSections();
     initQuizControls();
