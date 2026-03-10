@@ -237,6 +237,13 @@ const App = (() => {
       showScreen('mock-screen');
     });
 
+    $('#mode-ca')?.addEventListener('click', () => {
+      state.district = 'ca';
+      state.practiceMode = 'ca';
+      renderCAPapers();
+      showScreen('ca-screen');
+    });
+
     $('#mode-district')?.addEventListener('click', () => {
       state.practiceMode = 'district';
       renderDistricts();
@@ -300,6 +307,63 @@ const App = (() => {
       card.addEventListener('click', () => {
         state.year = paper.year || paperNum;
         state.district = 'mock';
+        renderSections();
+        showScreen('section-screen');
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  function renderCAPapers() {
+    const grid = $('#ca-papers-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    const papers = loadFromStorage('papers') || {};
+
+    // Find all CA papers for current examType
+    const caKeys = Object.keys(papers).filter(k => k.startsWith(`${state.examType}_ca_`));
+
+    const now = Date.now();
+    const validCAKeys = caKeys.filter(k => {
+      const paper = papers[k];
+      const paperTime = paper.timestamp || now;
+      const ageMs = now - paperTime;
+      const daysOld = ageMs / (1000 * 60 * 60 * 24);
+
+      // Expire older than 3 days
+      if (daysOld > 3) {
+        delete papers[k];
+        return false;
+      }
+      return true;
+    });
+
+    // Save back if any were deleted
+    if (caKeys.length !== validCAKeys.length) {
+      saveToStorage('papers', papers);
+    }
+
+    if (validCAKeys.length === 0) {
+      grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--text-secondary); padding:40px;">आज चालू घडामोडी उपलब्ध नाहीत.<br>No current affairs available yet. Papers expire after 3 days.</p>';
+      return;
+    }
+
+    // Sort descending (newest first)
+    validCAKeys.sort((a, b) => (papers[b].timestamp || 0) - (papers[a].timestamp || 0));
+
+    validCAKeys.forEach((key, idx) => {
+      const paper = papers[key];
+      const caDate = new Date(paper.timestamp || now).toLocaleDateString('mr-IN');
+
+      const card = document.createElement('button');
+      card.className = `mock-paper-card unattempted`;
+      card.innerHTML = `
+        <div class="mock-num">Daily CA: ${caDate}</div>
+        <div class="mock-status">15 Questions</div>
+      `;
+      card.addEventListener('click', () => {
+        state.year = paper.year;
+        state.district = 'ca';
         renderSections();
         showScreen('section-screen');
       });
@@ -1208,9 +1272,12 @@ const App = (() => {
           if (!data.district || !data.year || !data.sections) { toast('Invalid format. Need: district, year, sections', 'error'); return; }
           const papers = loadFromStorage('papers') || {};
           const key = `${data.examType || 'police_bharti'}_${data.district}_${data.year}`;
+          if (!data.timestamp) data.timestamp = Date.now();
           papers[key] = data;
           saveToStorage('papers', papers);
-          const totalQ = Object.values(data.sections).reduce((sum, arr) => sum + arr.length, 0);
+          const totalQ = Array.isArray(data.sections)
+            ? data.sections.reduce((sum, s) => sum + s.questions.length, 0)
+            : Object.values(data.sections).reduce((sum, arr) => sum + arr.length, 0);
           toast(`Paper uploaded: ${data.district} ${data.year} (${totalQ} questions)`, 'success');
         } catch (err) { toast('Error parsing JSON: ' + err.message, 'error'); }
       } else if (file.name.endsWith('.csv')) {
@@ -1247,7 +1314,7 @@ const App = (() => {
 
             const key = `${examType}_${district}_${year}`;
             currentKey = key;
-            if (!papers[key]) papers[key] = { district, year: parseInt(year), examType, sections: { math: [], gk: [], reasoning: [], marathi: [] } };
+            if (!papers[key]) papers[key] = { district, year: parseInt(year), examType, timestamp: Date.now(), sections: { math: [], gk: [], reasoning: [], marathi: [] } };
             if (!papers[key].sections[section]) papers[key].sections[section] = [];
 
             papers[key].sections[section].push({ q: qText, options: opts, answer });
@@ -1299,6 +1366,8 @@ const App = (() => {
     const distSelect = $('#admin-district');
     if (!distSelect) return;
     distSelect.innerHTML = '<option value="">-- Select District --</option>';
+    distSelect.innerHTML += '<option value="ca">📰 Current Affairs (चालू घडामोडी)</option>';
+    distSelect.innerHTML += '<option value="mock">📝 Mock Test (सराव चाचणी)</option>';
     DISTRICTS.forEach(d => {
       distSelect.innerHTML += `<option value="${d.id}">${d.emoji} ${d.name} (${d.nameEn})</option>`;
     });
