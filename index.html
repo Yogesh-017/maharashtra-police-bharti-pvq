@@ -139,12 +139,18 @@
       <h2>📋 सराव प्रकार निवडा</h2>
       <p>Choose your practice mode</p>
     </div>
-    <div class="exam-type-grid" style="max-width:600px; margin:0 auto;">
+    <div class="exam-type-grid" style="max-width:900px; margin:0 auto;">
       <div class="exam-type-card" id="mode-mock" style="cursor:pointer;">
         <div class="icon">📝</div>
         <h3>Mock Test (सराव चाचणी)</h3>
         <p>Practice with curated mock papers<br>No district selection needed</p>
         <div class="badge-line" style="background:#F5F0E1; color:#5D4037;">तयारीसाठी सराव</div>
+      </div>
+      <div class="exam-type-card" id="mode-ca" style="cursor:pointer;">
+        <div class="icon">📰</div>
+        <h3>Current Affairs (चालू घडामोडी)</h3>
+        <p>Daily 15 questions test<br>Papers expire after 3 days</p>
+        <div class="badge-line" style="background:#E3F2FD; color:#0D47A1;">दररोजचा सराव</div>
       </div>
       <div class="exam-type-card" id="mode-district" style="cursor:pointer;">
         <div class="icon">📍</div>
@@ -163,6 +169,16 @@
       <p>Select a mock test paper to practice</p>
     </div>
     <div class="mock-papers-grid" id="mock-papers-grid"></div>
+  </section>
+
+  <!-- =================== SCREEN 3d: CURRENT AFFAIRS LIST =================== -->
+  <section id="ca-screen" class="screen">
+    <div class="screen-header" style="margin-top:20px;">
+      <button class="back-btn" data-back="mode">← मागे जा</button>
+      <h2>📰 चालू घडामोडी सराव</h2>
+      <p>Daily current affairs quizzes (Automatically expires in 3 days)</p>
+    </div>
+    <div class="mock-papers-grid" id="ca-papers-grid"></div>
   </section>
 
   <!-- =================== SCREEN 4: DISTRICT SELECTION =================== -->
