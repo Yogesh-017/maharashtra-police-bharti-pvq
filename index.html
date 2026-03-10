@@ -1,250 +1,274 @@
 <!DOCTYPE html>
 <html lang="mr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Maharashtra Police Bharti & SRPF Previous Year Question Practice Platform. Solve PVQs district-wise with timed sections.">
+  <meta name="description"
+    content="Maharashtra Police Bharti & SRPF Previous Year Question Practice Platform. Solve PVQs district-wise with timed sections.">
   <title>महाराष्ट्र पोलीस भरती PVQ Platform</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚔</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚔</text></svg>">
 </head>
+
 <body>
 
-<!-- Fireworks Canvas -->
-<canvas id="fireworks-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;display:none;"></canvas>
+  <!-- Fireworks Canvas -->
+  <canvas id="fireworks-canvas"
+    style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;display:none;"></canvas>
 
-<!-- Toast Container -->
-<div class="toast-container"></div>
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
 
-<!-- Top Navigation -->
-<nav class="top-nav" style="display:none;">
-  <div class="nav-brand">🚔 PVQ Platform</div>
-  <div class="nav-actions">
-    <span id="nav-user-info" style="color:var(--text-secondary);font-size:0.85rem;"></span>
-    <button class="nav-btn" id="nav-home">🏠 Home</button>
-    <button class="nav-btn admin-btn" id="nav-admin" style="display:none;">⚙️ Admin</button>
-    <button class="nav-btn" id="nav-logout">🚪 Logout</button>
-  </div>
-</nav>
-
-<!-- =================== SCREEN 1: LANDING =================== -->
-<section id="landing-screen" class="screen active">
-  <div class="siren-glow"></div>
-  <!-- Vertical Siren Light -->
-  <div class="siren-container">
-    <div class="siren-dome">
-      <div class="siren-light red"></div>
-      <div class="siren-light blue"></div>
+  <!-- Top Navigation -->
+  <nav class="top-nav" style="display:none;">
+    <div class="nav-brand">🚔 PVQ Platform</div>
+    <div class="nav-actions">
+      <span id="nav-user-info" style="color:var(--text-secondary);font-size:0.85rem;"></span>
+      <button class="nav-btn" id="nav-home">🏠 Home</button>
+      <button class="nav-btn admin-btn" id="nav-admin" style="display:none;">⚙️ Admin</button>
+      <button class="nav-btn" id="nav-logout">🚪 Logout</button>
     </div>
-    <div class="siren-base"></div>
-  </div>
-  <h1 class="landing-title">महाराष्ट्र पोलीस भरती PVQ</h1>
-  <p class="landing-subtitle">Previous Year Question Practice Platform</p>
-  <button class="enter-btn">🚔 प्रवेश करा — Enter</button>
-  <!-- Removed silhouettes per user request -->
-  <!-- Bottom Quote -->
-  <p class="landing-quote">"सदरक्षणाय खलनिग्रहणाय" — सज्जनांचे रक्षण आणि दुर्जनांचे निग्रहण</p>
-</section>
+  </nav>
 
-<!-- =================== SCREEN 2: AUTH =================== -->
-<section id="auth-screen" class="screen">
-  <div class="auth-card">
-    <div class="auth-badge">🛡️</div>
-    <h2 class="auth-title" id="auth-title">साइन इन करा</h2>
-    <p class="auth-subtitle" id="auth-subtitle">Welcome back, officer!</p>
-    <form id="auth-form">
-      <div class="form-group" id="auth-name-group" style="display:none;">
-        <label>Full Name / पूर्ण नाव</label>
-        <input type="text" id="auth-name" placeholder="Enter your name">
+  <!-- =================== SCREEN 1: LANDING =================== -->
+  <section id="landing-screen" class="screen active">
+    <div class="siren-glow"></div>
+    <!-- Vertical Siren Light -->
+    <div class="siren-container">
+      <div class="siren-dome">
+        <div class="siren-light red"></div>
+        <div class="siren-light blue"></div>
       </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="auth-email" placeholder="officer@example.com" required>
-      </div>
-      <div class="form-group">
-        <label>Password / पासवर्ड</label>
-        <input type="password" id="auth-password" placeholder="••••••••" required>
-      </div>
-      <div class="auth-disclaimer" style="font-size: 0.8rem; color: var(--gold); margin-bottom: 20px; line-height: 1.4; padding: 10px; background: rgba(255, 215, 0, 0.1); border-radius: 6px; border-left: 3px solid var(--gold);">
-        ⚠️ <b>टीप:</b> तुमचा मूळ (Original) Gmail आणि Password येथे टाकू नका. तुम्ही इथे जो Email आणि Password तयार कराल, तो फक्त याच वेबसाईट पुरता मर्यादित राहील. CAPTCHA ला पर्याय म्हणून ही Login सिस्टीम दिली आहे.
-      </div>
-      <button type="submit" class="btn-primary" id="auth-submit">Sign In</button>
-    </form>
-    <div class="auth-toggle">
-      <span id="auth-toggle-text">Don't have an account? </span>
-      <a id="auth-toggle-link">Sign Up</a>
+      <div class="siren-base"></div>
     </div>
-  </div>
-</section>
+    <h1 class="landing-title">महाराष्ट्र पोलीस भरती PVQ</h1>
+    <p class="landing-subtitle">Previous Year Question Practice Platform</p>
+    <button class="enter-btn">🚔 प्रवेश करा — Enter</button>
+    <!-- Removed silhouettes per user request -->
+    <!-- Bottom Quote -->
+    <p class="landing-quote">"सदरक्षणाय खलनिग्रहणाय" — सज्जनांचे रक्षण आणि दुर्जनांचे निग्रहण</p>
+  </section>
 
-<!-- =================== SCREEN 3: EXAM TYPE =================== -->
-<section id="examtype-screen" class="screen">
-  <div class="screen-header">
-    <h2>🎯 परीक्षा प्रकार निवडा</h2>
-    <p>Select your exam type to begin practice</p>
-  </div>
-  <p class="examtype-motto">"सदरक्षणाय खलनिग्रहणाय" — Maharashtra Police</p>
-  <div class="exam-type-grid">
-    <div class="exam-type-card" data-type="police_bharti">
-      <div class="icon">🛡️</div>
-      <h3>पोलीस भरती</h3>
-      <p>Maharashtra Police Constable Recruitment<br>100 MCQs • 90 Minutes • 4 Sections</p>
-      <div class="badge-line">महाराष्ट्र पोलीस दल</div>
-    </div>
-    <div class="exam-type-card" data-type="srpf">
-      <div class="icon">⚔️</div>
-      <h3>SRPF</h3>
-      <p>State Reserve Police Force Recruitment<br>100 MCQs • 90 Minutes • 4 Sections</p>
-      <div class="badge-line">राज्य राखीव पोलीस दल</div>
-    </div>
-  </div>
-
-  <!-- Test History -->
-  <div class="history-section" id="history-section"></div>
-
-  <!-- Feedback Bar -->
-  <div class="feedback-bar">
-    <p>💬 आम्हाला अजून काही features तुम्हाला add करायच्या असतील तर आम्हाला कळवा — म्हणजे आम्हाला तुमची सेवा करण्यात आनंद मिळेल! 🙏<br><a href="mailto:feedback@pvqplatform.com">📧 feedback@pvqplatform.com</a></p>
-  </div>
-</section>
-
-<!-- =================== SCREEN 4: DISTRICT SELECTION =================== -->
-<section id="district-screen" class="screen">
-  <div class="screen-header" style="margin-top:20px;">
-    <button class="back-btn" data-back="examtype">← मागे जा</button>
-    <h2>📍 जिल्हा निवडा</h2>
-    <p>Select your district — each district has its unique identity!</p>
-  </div>
-  <div class="district-search">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="district-search-input" placeholder="जिल्हा शोधा / Search district...">
-  </div>
-  <div class="division-tabs"></div>
-  <div class="districts-grid"></div>
-</section>
-
-<!-- =================== SCREEN 5: YEAR SELECTION =================== -->
-<section id="year-screen" class="screen">
-  <div class="screen-header" id="year-screen-header">
-    <button class="back-btn" data-back="district">← मागे जा</button>
-    <h2>📅 वर्ष निवडा</h2>
-    <p>Select the year of the question paper</p>
-  </div>
-  <div class="years-grid"></div>
-</section>
-
-<!-- =================== SCREEN 6: SECTION & TIMER =================== -->
-<section id="section-screen" class="screen">
-  <div class="screen-header">
-    <button class="back-btn" data-back="year">← मागे जा</button>
-    <h2>📝 विभाग आणि वेळ सेट करा</h2>
-    <p>Choose sections to attempt and configure your timer</p>
-  </div>
-  <div class="sections-container">
-    <div id="sections-list"></div>
-
-    <div class="timer-config">
-      <h3>⏱️ Timer Settings</h3>
-      <div class="timer-options">
-        <label class="timer-option active">
-          <input type="radio" name="timer-mode" value="auto" checked>
-          <span>🔄 Auto-divide (Total 90 min ÷ selected sections)</span>
-        </label>
-        <label class="timer-option">
-          <input type="radio" name="timer-mode" value="custom">
-          <span>✏️ Custom time per section (manually set)</span>
-        </label>
-        <label class="timer-option">
-          <input type="radio" name="timer-mode" value="none">
-          <span>♾️ No timer — Practice mode</span>
-        </label>
+  <!-- =================== SCREEN 2: AUTH =================== -->
+  <section id="auth-screen" class="screen">
+    <div class="auth-card">
+      <div class="auth-badge">🛡️</div>
+      <h2 class="auth-title" id="auth-title">साइन इन करा</h2>
+      <p class="auth-subtitle" id="auth-subtitle">Welcome back, officer!</p>
+      <form id="auth-form">
+        <div class="form-group" id="auth-name-group" style="display:none;">
+          <label>Full Name / पूर्ण नाव</label>
+          <input type="text" id="auth-name" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="auth-email" placeholder="officer@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password / पासवर्ड</label>
+          <input type="password" id="auth-password" placeholder="••••••••" required>
+        </div>
+        <div class="auth-disclaimer"
+          style="font-size: 0.8rem; color: var(--gold); margin-bottom: 20px; line-height: 1.4; padding: 10px; background: rgba(255, 215, 0, 0.1); border-radius: 6px; border-left: 3px solid var(--gold);">
+          ⚠️ <b>टीप:</b> तुमचा मूळ (Original) Gmail आणि Password येथे टाकू नका. तुम्ही इथे जो Email आणि Password तयार
+          कराल, तो फक्त याच वेबसाईट पुरता मर्यादित राहील. CAPTCHA ला पर्याय म्हणून ही Login सिस्टीम दिली आहे.
+        </div>
+        <button type="submit" class="btn-primary" id="auth-submit">Sign In</button>
+      </form>
+      <div style="display:flex; align-items:center; gap:12px; margin:16px 0;">
+        <div style="flex:1; height:1px; background:var(--glass-border);"></div>
+        <span style="color:var(--text-secondary); font-size:0.85rem;">किंवा (OR)</span>
+        <div style="flex:1; height:1px; background:var(--glass-border);"></div>
       </div>
-      <div class="custom-timer-inputs" id="custom-timer-list"></div>
+      <button id="google-signin-btn" type="button"
+        style="width:100%; padding:14px; border-radius:var(--radius-sm); border:1px solid var(--glass-border); background:white; color:#333; font-size:1rem; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:var(--transition);">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G"
+          style="width:20px; height:20px;">
+        Sign in with Google
+      </button>
+      <div class="auth-toggle">
+        <span id="auth-toggle-text">Don't have an account? </span>
+        <a id="auth-toggle-link">Sign Up</a>
+      </div>
     </div>
+  </section>
 
-    <div class="timer-config" style="margin-top:20px;">
-      <h3>🎯 Target Score Settings</h3>
-      <div class="form-group" style="margin-top:12px;">
-        <label>Expected Target Score / अपेक्षित गुण</label>
-        <select id="target-score-select" style="width:100%;padding:12px 16px;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:1rem;font-family:inherit;">
-          <option value="50" style="background:var(--navy-dark)">50 - 60+ (Average / ठीक)</option>
-          <option value="60" style="background:var(--navy-dark)">60 - 70+ (Good / चांगले)</option>
-          <option value="70" style="background:var(--navy-dark)">70 - 80+ (Very Good / उत्तम)</option>
-          <option value="80" style="background:var(--navy-dark)" selected>80 - 90+ (Excellent / अतिउत्तम)</option>
-          <option value="90" style="background:var(--navy-dark)">90 - 100 (Topper / सर्वोत्कृष्ट)</option>
-        </select>
+  <!-- =================== SCREEN 3: EXAM TYPE =================== -->
+  <section id="examtype-screen" class="screen">
+    <div class="screen-header">
+      <h2>🎯 परीक्षा प्रकार निवडा</h2>
+      <p>Select your exam type to begin practice</p>
+    </div>
+    <p class="examtype-motto">"सदरक्षणाय खलनिग्रहणाय" — Maharashtra Police</p>
+    <div class="exam-type-grid">
+      <div class="exam-type-card" data-type="police_bharti">
+        <div class="icon">🛡️</div>
+        <h3>पोलीस भरती</h3>
+        <p>Maharashtra Police Constable Recruitment<br>100 MCQs • 90 Minutes • 4 Sections</p>
+        <div class="badge-line">महाराष्ट्र पोलीस दल</div>
+      </div>
+      <div class="exam-type-card" data-type="srpf">
+        <div class="icon">⚔️</div>
+        <h3>SRPF</h3>
+        <p>State Reserve Police Force Recruitment<br>100 MCQs • 90 Minutes • 4 Sections</p>
+        <div class="badge-line">राज्य राखीव पोलीस दल</div>
       </div>
     </div>
 
-    <button class="start-quiz-btn" id="start-quiz-btn">🚀 Start Quiz — परीक्षा सुरू करा</button>
-  </div>
-</section>
+    <!-- Test History -->
+    <div class="history-section" id="history-section"></div>
 
-<!-- =================== SCREEN 7: QUIZ =================== -->
-<section id="quiz-screen" class="screen">
-  <!-- Slim Question Timeline for Desktop/Mobile Status Tracking -->
-  <aside class="quiz-timeline" id="quiz-timeline"></aside>
-
-  <!-- Main Quiz Area -->
-  <div class="quiz-main">
-    <div class="quiz-topbar">
-      <div class="quiz-subject" id="quiz-subject-header" style="font-weight: 700; font-size: 1.1rem; color: var(--khaki-light);">Subject Name</div>
-      <div class="quiz-tracker" id="quiz-attempted-tracker" style="font-size: 0.9em; color: var(--khaki); margin-left: auto; margin-right: 15px;">Attempted: 0 / 0</div>
-      <div class="quiz-timer">⏱️ 00:00</div>
+    <!-- Feedback Bar -->
+    <div class="feedback-bar">
+      <p>💬 आम्हाला अजून काही features तुम्हाला add करायच्या असतील तर आम्हाला कळवा — म्हणजे आम्हाला तुमची सेवा करण्यात
+        आनंद मिळेल! 🙏<br><a href="mailto:feedback@pvqplatform.com">📧 feedback@pvqplatform.com</a></p>
     </div>
-    <div class="quiz-content"></div>
-    <div class="quiz-bottom-bar">
-      <button class="quiz-btn" id="quiz-prev">⬅️ Previous</button>
-      <button class="quiz-btn flag" id="quiz-flag">🚩 Flag</button>
-      <button class="quiz-btn" id="quiz-next">➡️ Next</button>
-      <button class="quiz-btn submit" id="quiz-submit">✅ Submit</button>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- =================== SCREEN 8: RESULTS =================== -->
-<section id="results-screen" class="screen">
-  <div class="screen-header">
-    <h2>📊 निकाल — Results</h2>
-  </div>
-  <div class="results-card"></div>
-</section>
-
-<!-- =================== SCREEN 9: ADMIN =================== -->
-<section id="admin-screen" class="screen">
-  <div class="admin-container">
+  <!-- =================== SCREEN 4: DISTRICT SELECTION =================== -->
+  <section id="district-screen" class="screen">
     <div class="screen-header" style="margin-top:20px;">
-      <button class="back-btn" data-back="home">← मुख्यपृष्ठ</button>
-      <h2>⚙️ Admin Panel — प्रश्नपत्रिका व्यवस्थापन</h2>
-      <p>Upload and manage question papers</p>
+      <button class="back-btn" data-back="examtype">← मागे जा</button>
+      <h2>📍 जिल्हा निवडा</h2>
+      <p>Select your district — each district has its unique identity!</p>
     </div>
-
-    <div class="admin-tabs">
-      <button class="admin-tab active" data-panel="upload-panel">📤 Upload File</button>
-      <button class="admin-tab" data-panel="manual-panel">✏️ Add Manually</button>
-      <button class="admin-tab" data-panel="manage-panel">📋 Manage Papers</button>
+    <div class="district-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="district-search-input" placeholder="जिल्हा शोधा / Search district...">
     </div>
+    <div class="division-tabs"></div>
+    <div class="districts-grid"></div>
+  </section>
 
-    <!-- Upload File Panel -->
-    <div class="admin-panel active" id="upload-panel">
-      <div class="upload-zone">
-        <div class="upload-icon">📁</div>
-        <p>Click or drag & drop a JSON or CSV file here</p>
-        <p class="upload-hint">Upload a <b>.json</b> file or a <b>.csv</b> file</p>
+  <!-- =================== SCREEN 5: YEAR SELECTION =================== -->
+  <section id="year-screen" class="screen">
+    <div class="screen-header" id="year-screen-header">
+      <button class="back-btn" data-back="district">← मागे जा</button>
+      <h2>📅 वर्ष निवडा</h2>
+      <p>Select the year of the question paper</p>
+    </div>
+    <div class="years-grid"></div>
+  </section>
+
+  <!-- =================== SCREEN 6: SECTION & TIMER =================== -->
+  <section id="section-screen" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" data-back="year">← मागे जा</button>
+      <h2>📝 विभाग आणि वेळ सेट करा</h2>
+      <p>Choose sections to attempt and configure your timer</p>
+    </div>
+    <div class="sections-container">
+      <div id="sections-list"></div>
+
+      <div class="timer-config">
+        <h3>⏱️ Timer Settings</h3>
+        <div class="timer-options">
+          <label class="timer-option active">
+            <input type="radio" name="timer-mode" value="auto" checked>
+            <span>🔄 Auto-divide (Total 90 min ÷ selected sections)</span>
+          </label>
+          <label class="timer-option">
+            <input type="radio" name="timer-mode" value="custom">
+            <span>✏️ Custom time per section (manually set)</span>
+          </label>
+          <label class="timer-option">
+            <input type="radio" name="timer-mode" value="none">
+            <span>♾️ No timer — Practice mode</span>
+          </label>
+        </div>
+        <div class="custom-timer-inputs" id="custom-timer-list"></div>
       </div>
-      <input type="file" id="json-file-input" accept=".json,.csv" style="display:none;">
 
-      <div style="background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:20px;margin-top:16px;">
-        <h4 style="color:var(--khaki-light);margin-bottom:12px;">📝 CSV Format Rules:</h4>
-        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.6;margin-bottom:16px;">
-          Columns required: <b>district, year, examType, section, q, optA, optB, optC, optD, answer</b>.<br>
-          <i>district</i>: (e.g. pune), <i>year</i>: (e.g. 2024)<br>
-          <i>examType</i>: "police_bharti" or "srpf"<br>
-          <i>section</i>: "math", "gk", "reasoning", or "marathi"<br>
-          <i>answer</i>: 0, 1, 2, or 3 (0=A, 1=B, 2=C, 3=D)<br>
-        </p>
-        <h4 style="color:var(--khaki-light);margin-bottom:12px;">📝 JSON Format Example:</h4>
-        <pre style="background:rgba(0,0,0,0.3);padding:16px;border-radius:8px;font-size:0.8rem;overflow-x:auto;color:var(--text-secondary);line-height:1.6;">{
+      <div class="timer-config" style="margin-top:20px;">
+        <h3>🎯 Target Score Settings</h3>
+        <div class="form-group" style="margin-top:12px;">
+          <label>Expected Target Score / अपेक्षित गुण</label>
+          <select id="target-score-select"
+            style="width:100%;padding:12px 16px;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:1rem;font-family:inherit;">
+            <option value="50" style="background:var(--navy-dark)">50 - 60+ (Average / ठीक)</option>
+            <option value="60" style="background:var(--navy-dark)">60 - 70+ (Good / चांगले)</option>
+            <option value="70" style="background:var(--navy-dark)">70 - 80+ (Very Good / उत्तम)</option>
+            <option value="80" style="background:var(--navy-dark)" selected>80 - 90+ (Excellent / अतिउत्तम)</option>
+            <option value="90" style="background:var(--navy-dark)">90 - 100 (Topper / सर्वोत्कृष्ट)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="start-quiz-btn" id="start-quiz-btn">🚀 Start Quiz — परीक्षा सुरू करा</button>
+    </div>
+  </section>
+
+  <!-- =================== SCREEN 7: QUIZ =================== -->
+  <section id="quiz-screen" class="screen">
+    <!-- Slim Question Timeline for Desktop/Mobile Status Tracking -->
+    <aside class="quiz-timeline" id="quiz-timeline"></aside>
+
+    <!-- Main Quiz Area -->
+    <div class="quiz-main">
+      <div class="quiz-topbar">
+        <div class="quiz-subject" id="quiz-subject-header"
+          style="font-weight: 700; font-size: 1.1rem; color: var(--khaki-light);">Subject Name</div>
+        <div class="quiz-tracker" id="quiz-attempted-tracker"
+          style="font-size: 0.9em; color: var(--khaki); margin-left: auto; margin-right: 15px;">Attempted: 0 / 0</div>
+        <div class="quiz-timer">⏱️ 00:00</div>
+      </div>
+      <div class="quiz-content"></div>
+      <div class="quiz-bottom-bar">
+        <button class="quiz-btn" id="quiz-prev">⬅️ Previous</button>
+        <button class="quiz-btn flag" id="quiz-flag">🚩 Flag</button>
+        <button class="quiz-btn" id="quiz-next">➡️ Next</button>
+        <button class="quiz-btn submit" id="quiz-submit">✅ Submit</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== SCREEN 8: RESULTS =================== -->
+  <section id="results-screen" class="screen">
+    <div class="screen-header">
+      <h2>📊 निकाल — Results</h2>
+    </div>
+    <div class="results-card"></div>
+  </section>
+
+  <!-- =================== SCREEN 9: ADMIN =================== -->
+  <section id="admin-screen" class="screen">
+    <div class="admin-container">
+      <div class="screen-header" style="margin-top:20px;">
+        <button class="back-btn" data-back="home">← मुख्यपृष्ठ</button>
+        <h2>⚙️ Admin Panel — प्रश्नपत्रिका व्यवस्थापन</h2>
+        <p>Upload and manage question papers</p>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-panel="upload-panel">📤 Upload File</button>
+        <button class="admin-tab" data-panel="manual-panel">✏️ Add Manually</button>
+        <button class="admin-tab" data-panel="manage-panel">📋 Manage Papers</button>
+      </div>
+
+      <!-- Upload File Panel -->
+      <div class="admin-panel active" id="upload-panel">
+        <div class="upload-zone">
+          <div class="upload-icon">📁</div>
+          <p>Click or drag & drop a JSON or CSV file here</p>
+          <p class="upload-hint">Upload a <b>.json</b> file or a <b>.csv</b> file</p>
+        </div>
+        <input type="file" id="json-file-input" accept=".json,.csv" style="display:none;">
+
+        <div
+          style="background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:20px;margin-top:16px;">
+          <h4 style="color:var(--khaki-light);margin-bottom:12px;">📝 CSV Format Rules:</h4>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.6;margin-bottom:16px;">
+            Columns required: <b>district, year, examType, section, q, optA, optB, optC, optD, answer</b>.<br>
+            <i>district</i>: (e.g. pune), <i>year</i>: (e.g. 2024)<br>
+            <i>examType</i>: "police_bharti" or "srpf"<br>
+            <i>section</i>: "math", "gk", "reasoning", or "marathi"<br>
+            <i>answer</i>: 0, 1, 2, or 3 (0=A, 1=B, 2=C, 3=D)<br>
+          </p>
+          <h4 style="color:var(--khaki-light);margin-bottom:12px;">📝 JSON Format Example:</h4>
+          <pre
+            style="background:rgba(0,0,0,0.3);padding:16px;border-radius:8px;font-size:0.8rem;overflow-x:auto;color:var(--text-secondary);line-height:1.6;">{
   "district": "pune",
   "year": 2024,
   "examType": "police_bharti",
@@ -258,121 +282,142 @@
   }
 }
 <span style="color:var(--khaki);">// answer: 0=A, 1=B, 2=C, 3=D (zero-indexed)</span></pre>
+        </div>
+      </div>
+
+      <!-- Manual Entry Panel -->
+      <div class="admin-panel" id="manual-panel">
+        <form class="admin-form" id="admin-manual-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Exam Type</label>
+              <select id="admin-exam-type">
+                <option value="police_bharti">पोलीस भरती</option>
+                <option value="srpf">SRPF</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>District / जिल्हा</label>
+              <select id="admin-district"></select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Year / वर्ष</label>
+              <input type="number" id="admin-year" min="2015" max="2030" placeholder="2024">
+            </div>
+            <div class="form-group">
+              <label>Section / विभाग</label>
+              <select id="admin-section">
+                <option value="math">🔢 Mathematics</option>
+                <option value="gk">🌍 GK & Current Affairs</option>
+                <option value="reasoning">🧠 Reasoning</option>
+                <option value="marathi">📖 Marathi Grammar</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label>Question / प्रश्न</label>
+              <textarea id="admin-q-text" placeholder="Type your question here..."></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Option A</label>
+              <input type="text" id="admin-opt-a" placeholder="Option A">
+            </div>
+            <div class="form-group">
+              <label>Option B</label>
+              <input type="text" id="admin-opt-b" placeholder="Option B">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Option C</label>
+              <input type="text" id="admin-opt-c" placeholder="Option C">
+            </div>
+            <div class="form-group">
+              <label>Option D</label>
+              <input type="text" id="admin-opt-d" placeholder="Option D">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Correct Answer / बरोबर उत्तर</label>
+              <select id="admin-answer">
+                <option value="0">A</option>
+                <option value="1">B</option>
+                <option value="2">C</option>
+                <option value="3">D</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">➕ Add Question</button>
+        </form>
+      </div>
+
+      <!-- Manage Papers Panel -->
+      <div class="admin-panel" id="manage-panel">
+        <div class="paper-list" id="paper-list"></div>
       </div>
     </div>
+  </section>
 
-    <!-- Manual Entry Panel -->
-    <div class="admin-panel" id="manual-panel">
-      <form class="admin-form" id="admin-manual-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Exam Type</label>
-            <select id="admin-exam-type">
-              <option value="police_bharti">पोलीस भरती</option>
-              <option value="srpf">SRPF</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>District / जिल्हा</label>
-            <select id="admin-district"></select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Year / वर्ष</label>
-            <input type="number" id="admin-year" min="2015" max="2030" placeholder="2024">
-          </div>
-          <div class="form-group">
-            <label>Section / विभाग</label>
-            <select id="admin-section">
-              <option value="math">🔢 Mathematics</option>
-              <option value="gk">🌍 GK & Current Affairs</option>
-              <option value="reasoning">🧠 Reasoning</option>
-              <option value="marathi">📖 Marathi Grammar</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row full">
-          <div class="form-group">
-            <label>Question / प्रश्न</label>
-            <textarea id="admin-q-text" placeholder="Type your question here..."></textarea>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Option A</label>
-            <input type="text" id="admin-opt-a" placeholder="Option A">
-          </div>
-          <div class="form-group">
-            <label>Option B</label>
-            <input type="text" id="admin-opt-b" placeholder="Option B">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Option C</label>
-            <input type="text" id="admin-opt-c" placeholder="Option C">
-          </div>
-          <div class="form-group">
-            <label>Option D</label>
-            <input type="text" id="admin-opt-d" placeholder="Option D">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Correct Answer / बरोबर उत्तर</label>
-            <select id="admin-answer">
-              <option value="0">A</option>
-              <option value="1">B</option>
-              <option value="2">C</option>
-              <option value="3">D</option>
-            </select>
-          </div>
-        </div>
-        <button type="submit" class="btn-primary">➕ Add Question</button>
-      </form>
-    </div>
-
-    <!-- Manage Papers Panel -->
-    <div class="admin-panel" id="manage-panel">
-      <div class="paper-list" id="paper-list"></div>
+  <!-- =================== SUBMIT CONFIRM MODAL =================== -->
+  <div id="submit-confirm-modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center; padding:20px;">
+    <div
+      style="background:var(--bg-card); border:1px solid var(--glass-border); border-radius:var(--radius-lg); max-width:400px; width:100%; padding:30px; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
+      <div style="font-size:3rem; margin-bottom:16px;">⚠️</div>
+      <h3 style="color:var(--gold); font-size:1.4rem; margin-bottom:12px;">Submit Test?</h3>
+      <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:20px;">
+        Are you sure you want to submit the test?<br>सबमिट करायचे आहे का?
+      </p>
+      <div style="display:flex; justify-content:center; gap:15px;">
+        <button id="submit-cancel-btn"
+          style="background:var(--navy-light); color:var(--text); border:1px solid var(--border); padding:10px 20px; border-radius:25px; cursor:pointer; font-weight:600;">No,
+          Go Back</button>
+        <button id="submit-confirm-btn"
+          style="background:linear-gradient(135deg, var(--success), #2E7D32); color:white; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-weight:600;">Yes,
+          Submit ✅</button>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- =================== SUBMIT CONFIRM MODAL =================== -->
-<div id="submit-confirm-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center; padding:20px;">
-  <div style="background:var(--bg-card); border:1px solid var(--glass-border); border-radius:var(--radius-lg); max-width:400px; width:100%; padding:30px; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
-    <div style="font-size:3rem; margin-bottom:16px;">⚠️</div>
-    <h3 style="color:var(--gold); font-size:1.4rem; margin-bottom:12px;">Submit Test?</h3>
-    <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:20px;">
-      Are you sure you want to submit the test?<br>सबमिट करायचे आहे का?
-    </p>
-    <div style="display:flex; justify-content:center; gap:15px;">
-      <button id="submit-cancel-btn" style="background:var(--navy-light); color:var(--text); border:1px solid var(--border); padding:10px 20px; border-radius:25px; cursor:pointer; font-weight:600;">No, Go Back</button>
-      <button id="submit-confirm-btn" style="background:linear-gradient(135deg, var(--success), #2E7D32); color:white; border:none; padding:10px 20px; border-radius:25px; cursor:pointer; font-weight:600;">Yes, Submit ✅</button>
+  <!-- =================== DONATION MODAL =================== -->
+  <div id="donation-modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center; padding:20px;">
+    <div
+      style="background:var(--bg-card); border:1px solid var(--glass-border); border-radius:var(--radius-lg); max-width:500px; width:100%; padding:30px; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.5); position:relative; overflow:hidden;">
+      <div
+        style="position:absolute; top:-50px; left:-50px; width:100px; height:100px; background:var(--gold); filter:blur(50px); opacity:0.2;">
+      </div>
+      <div style="font-size:3rem; margin-bottom:16px;">🙏</div>
+      <h3 style="color:var(--khaki-light); font-size:1.4rem; margin-bottom:12px;">एक छोटीशी मदत</h3>
+      <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:20px; text-align:left;">
+        ही वेबसाईट AI च्या मदतीने तयार करण्यात आली आहे आणि सध्या ती मोफत होस्टिंगवर चालवली जात आहे. जे पोलीस भरतीचे
+        विद्यार्थी महागडी पुस्तके किंवा टेस्ट सिरीज घेऊ शकत नाहीत त्यांच्यासाठी हे एक मोफत व्यासपीठ आहे.<br><br>
+        जर तुम्हाला हा उपक्रम आवडला असेल आणि तुम्ही मदत करू इच्छित असाल, तर तुम्ही <b>५० रुपयांपर्यंत</b> देणगी देऊ
+        शकता. ५० पेक्षा जास्त रक्कम स्वीकारली जाणार नाही <i>(ती पाठवल्यास परत केली जाईल)</i>.<br><br>
+        तुमच्या मदतीमुळे हे प्लॅटफॉर्म आणखी प्रगत करण्यासाठी व जास्तीत जास्त गरीब विद्यार्थ्यांपर्यंत पोहोचवण्यासाठी मदत
+        होईल. धन्यवाद! 🚔
+      </p>
+      <button onclick="document.getElementById('donation-modal').style.display='none'"
+        style="background:linear-gradient(135deg, var(--khaki), var(--gold-dim)); color:var(--navy-dark); font-weight:700; border:none; padding:12px 30px; border-radius:50px; cursor:pointer; font-size:1rem; box-shadow:0 4px 15px rgba(255,215,0,0.3);">समजले
+        (Close)</button>
     </div>
   </div>
-</div>
 
-<!-- =================== DONATION MODAL =================== -->
-<div id="donation-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center; padding:20px;">
-  <div style="background:var(--bg-card); border:1px solid var(--glass-border); border-radius:var(--radius-lg); max-width:500px; width:100%; padding:30px; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.5); position:relative; overflow:hidden;">
-    <div style="position:absolute; top:-50px; left:-50px; width:100px; height:100px; background:var(--gold); filter:blur(50px); opacity:0.2;"></div>
-    <div style="font-size:3rem; margin-bottom:16px;">🙏</div>
-    <h3 style="color:var(--khaki-light); font-size:1.4rem; margin-bottom:12px;">एक छोटीशी मदत</h3>
-    <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:20px; text-align:left;">
-      ही वेबसाईट AI च्या मदतीने तयार करण्यात आली आहे आणि सध्या ती मोफत होस्टिंगवर चालवली जात आहे. जे पोलीस भरतीचे विद्यार्थी महागडी पुस्तके किंवा टेस्ट सिरीज घेऊ शकत नाहीत त्यांच्यासाठी हे एक मोफत व्यासपीठ आहे.<br><br>
-      जर तुम्हाला हा उपक्रम आवडला असेल आणि तुम्ही मदत करू इच्छित असाल, तर तुम्ही <b>५० रुपयांपर्यंत</b> देणगी देऊ शकता. ५० पेक्षा जास्त रक्कम स्वीकारली जाणार नाही <i>(ती पाठवल्यास परत केली जाईल)</i>.<br><br>
-      तुमच्या मदतीमुळे हे प्लॅटफॉर्म आणखी प्रगत करण्यासाठी व जास्तीत जास्त गरीब विद्यार्थ्यांपर्यंत पोहोचवण्यासाठी मदत होईल. धन्यवाद! 🚔
-    </p>
-    <button onclick="document.getElementById('donation-modal').style.display='none'" style="background:linear-gradient(135deg, var(--khaki), var(--gold-dim)); color:var(--navy-dark); font-weight:700; border:none; padding:12px 30px; border-radius:50px; cursor:pointer; font-size:1rem; box-shadow:0 4px 15px rgba(255,215,0,0.3);">समजले (Close)</button>
-  </div>
-</div>
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
 
-<!-- Scripts -->
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
 
 </body>
+
 </html>

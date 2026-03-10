@@ -54,16 +54,50 @@ const App = (() => {
   function initLanding() {
     const landing = $('#landing-screen');
     landing.addEventListener('click', () => {
-      const user = loadFromStorage('user');
-      showScreen(user ? 'examtype-screen' : 'auth-screen');
-      if (user) { state.user = user; updateNav(); }
+      // Let Firebase auth state handle navigation
+      if (state.user) {
+        showScreen('examtype-screen');
+        updateNav();
+      } else {
+        showScreen('auth-screen');
+      }
     });
-    // Auto transition
+
+    // Listen for Firebase Auth State Changes (auto-login returning users)
+    auth.onAuthStateChanged(async (firebaseUser) => {
+      if (firebaseUser) {
+        // User is signed in
+        state.user = {
+          name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+          email: firebaseUser.email,
+          uid: firebaseUser.uid
+        };
+        saveToStorage('user', state.user);
+        updateNav();
+
+        // Show admin button for admin user
+        const adminBtn = $('#nav-admin');
+        if (adminBtn) {
+          adminBtn.style.display = firebaseUser.email === 'admin@pvqplatform.com' ? 'inline-flex' : 'none';
+        }
+
+        // If still on landing or auth screen, navigate forward
+        if (landing.classList.contains('active') || $('#auth-screen').classList.contains('active')) {
+          showScreen('examtype-screen');
+          renderHistory();
+        }
+      }
+    });
+
+    // Auto transition after 4 seconds
     setTimeout(() => {
       if (landing.classList.contains('active')) {
-        const user = loadFromStorage('user');
-        showScreen(user ? 'examtype-screen' : 'auth-screen');
-        if (user) { state.user = user; updateNav(); }
+        if (state.user) {
+          showScreen('examtype-screen');
+          updateNav();
+        } else {
+          showScreen('auth-screen');
+        }
       }
     }, 4000);
   }
@@ -85,7 +119,7 @@ const App = (() => {
       $('#auth-toggle-text').textContent = isSignUp ? 'Already have an account? ' : "Don't have an account? ";
     });
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = $('#auth-name')?.value || '';
       const email = $('#auth-email').value;
@@ -94,28 +128,79 @@ const App = (() => {
       if (!email || !password) { toast('Please fill all fields', 'error'); return; }
       if (isSignUp && !name) { toast('Please enter your name', 'error'); return; }
 
-      if (isSignUp) {
-        const users = loadFromStorage('users') || {};
-        if (users[email]) { toast('Account already exists', 'error'); return; }
-        users[email] = { name, email, password, scores: [] };
-        saveToStorage('users', users);
-        toast('Account created! Please sign in.', 'success');
-        toggleLink.click();
-      } else {
-        const users = loadFromStorage('users') || {};
-        const user = users[email];
-        if (!user || user.password !== password) { toast('Invalid credentials', 'error'); return; }
-        state.user = user;
-        saveToStorage('user', user);
+      try {
+        if (isSignUp) {
+          // Firebase Sign Up
+          const cred = await auth.createUserWithEmailAndPassword(email, password);
+          await cred.user.updateProfile({ displayName: name });
+
+          // Save user profile to Firestore
+          await db.collection('users').doc(cred.user.uid).set({
+            name: name,
+            email: email,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+
+          state.user = { name, email, uid: cred.user.uid };
+          saveToStorage('user', state.user);
+          updateNav();
+          showScreen('examtype-screen');
+          renderHistory();
+          toast(`स्वागत आहे, ${name}! खाते तयार झाले 🙏`, 'success');
+        } else {
+          // Firebase Sign In
+          const cred = await auth.signInWithEmailAndPassword(email, password);
+          const userName = cred.user.displayName || email.split('@')[0];
+          state.user = { name: userName, email, uid: cred.user.uid };
+          saveToStorage('user', state.user);
+          updateNav();
+          showScreen('examtype-screen');
+          renderHistory();
+          toast(`स्वागत आहे, ${userName}! 🙏`, 'success');
+
+          // Show admin button only for admin user
+          const adminBtn = $('#nav-admin');
+          if (adminBtn) {
+            adminBtn.style.display = email === 'admin@pvqplatform.com' ? 'inline-flex' : 'none';
+          }
+        }
+      } catch (err) {
+        // Firebase error messages
+        let msg = 'Authentication failed';
+        if (err.code === 'auth/email-already-in-use') msg = 'हा ईमेल आधीच वापरला आहे (Email already exists)';
+        else if (err.code === 'auth/wrong-password') msg = 'चुकीचा पासवर्ड (Wrong password)';
+        else if (err.code === 'auth/user-not-found') msg = 'खाते सापडले नाही (Account not found)';
+        else if (err.code === 'auth/weak-password') msg = 'पासवर्ड कमीत कमी 6 अक्षरे असावा (Min 6 characters)';
+        else if (err.code === 'auth/invalid-email') msg = 'अवैध ईमेल (Invalid email)';
+        else if (err.code === 'auth/invalid-credential') msg = 'चुकीचा ईमेल किंवा पासवर्ड (Invalid email or password)';
+        toast(msg, 'error');
+      }
+    });
+
+    // Google Sign-In
+    $('#google-signin-btn')?.addEventListener('click', async () => {
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        const result = await auth.signInWithPopup(provider);
+        const user = result.user;
+
+        // Save user profile to Firestore (merge to not overwrite existing data)
+        await db.collection('users').doc(user.uid).set({
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL || '',
+          lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        state.user = { name: user.displayName, email: user.email, uid: user.uid };
+        saveToStorage('user', state.user);
         updateNav();
         showScreen('examtype-screen');
         renderHistory();
-        toast(`स्वागत आहे, ${user.name}! 🙏`, 'success');
-
-        // Show admin button only for admin user
-        const adminBtn = $('#nav-admin');
-        if (adminBtn) {
-          adminBtn.style.display = email === 'admin@pvqplatform.com' ? 'inline-flex' : 'none';
+        toast(`स्वागत आहे, ${user.displayName}! 🙏`, 'success');
+      } catch (err) {
+        if (err.code !== 'auth/popup-closed-by-user') {
+          toast('Google Sign-In failed: ' + err.message, 'error');
         }
       }
     });
@@ -1067,10 +1152,12 @@ const App = (() => {
       showScreen('admin-screen');
     });
     $('#nav-logout')?.addEventListener('click', () => {
-      state.user = null;
-      localStorage.removeItem('pvq_user');
-      showScreen('auth-screen');
-      toast('Logged out', 'info');
+      auth.signOut().then(() => {
+        state.user = null;
+        localStorage.removeItem('pvq_user');
+        showScreen('auth-screen');
+        toast('Logged out successfully', 'info');
+      });
     });
 
     // Back buttons
