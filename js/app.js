@@ -455,7 +455,21 @@ const App = (() => {
     const paper = papers[key];
 
     EXAM_CONFIG.sections.forEach(sec => {
-      const qCount = paper && paper.sections && paper.sections[sec.id] ? paper.sections[sec.id].length : 0;
+      // Map EXAM_CONFIG IDs to possible JSON section IDs
+      const idAliases = {
+        'math': ['math', 'ankganit'],
+        'gk': ['gk', 'samanya_dnyan'],
+        'reasoning': ['reasoning', 'buddhimatta'],
+        'marathi': ['marathi', 'marathi_vyakaran']
+      };
+      const aliases = idAliases[sec.id] || [sec.id];
+
+      // paper.sections is an array of objects with .id and .questions
+      let matchedSection = null;
+      if (paper && Array.isArray(paper.sections)) {
+        matchedSection = paper.sections.find(s => aliases.includes(s.id));
+      }
+      const qCount = matchedSection && matchedSection.questions ? matchedSection.questions.length : 0;
 
       const card = document.createElement('div');
       card.className = `section-card${qCount === 0 ? ' disabled' : ''}`;
@@ -558,7 +572,65 @@ const App = (() => {
   function getCurrentQuestions() {
     const paper = getPaper();
     if (!paper) return [];
-    return paper.sections[state.quiz.currentSection] || [];
+    const idAliases = {
+      'math': ['math', 'ankganit'],
+      'gk': ['gk', 'samanya_dnyan'],
+      'reasoning': ['reasoning', 'buddhimatta'],
+      'marathi': ['marathi', 'marathi_vyakaran']
+    };
+    const aliases = idAliases[state.quiz.currentSection] || [state.quiz.currentSection];
+
+    let questions = [];
+    if (Array.isArray(paper.sections)) {
+      // New format: sections is an array of {id, name, questions}
+      const matched = paper.sections.find(s => aliases.includes(s.id));
+      questions = matched ? matched.questions : [];
+    } else {
+      // Old format: sections is an object {math: [...], gk: [...]}
+      questions = paper.sections[state.quiz.currentSection] || [];
+    }
+
+    // Normalize: ensure each question has .q and .answer (index)
+    return questions.map(q => {
+      if (q.q !== undefined) return q; // already in old format
+      // Convert new format to old format
+      const normalized = { ...q, q: q.text, options: q.options };
+      // Convert "correct" string to answer index
+      if (q.correct !== undefined && q.answer === undefined) {
+        const idx = q.options.indexOf(q.correct);
+        normalized.answer = idx >= 0 ? idx : 0;
+      }
+      return normalized;
+    });
+  }
+
+  // Helper: get questions for a specific section (used by finishQuiz)
+  function getSectionQuestions(paper, secId) {
+    const idAliases = {
+      'math': ['math', 'ankganit'],
+      'gk': ['gk', 'samanya_dnyan'],
+      'reasoning': ['reasoning', 'buddhimatta'],
+      'marathi': ['marathi', 'marathi_vyakaran']
+    };
+    const aliases = idAliases[secId] || [secId];
+
+    let questions = [];
+    if (Array.isArray(paper.sections)) {
+      const matched = paper.sections.find(s => aliases.includes(s.id));
+      questions = matched ? matched.questions : [];
+    } else {
+      questions = paper.sections[secId] || [];
+    }
+
+    return questions.map(q => {
+      if (q.q !== undefined) return q;
+      const normalized = { ...q, q: q.text, options: q.options };
+      if (q.correct !== undefined && q.answer === undefined) {
+        const idx = q.options.indexOf(q.correct);
+        normalized.answer = idx >= 0 ? idx : 0;
+      }
+      return normalized;
+    });
   }
 
   function renderQuestion() {
@@ -818,7 +890,7 @@ const App = (() => {
     const sectionResults = {};
 
     state.selectedSections.forEach(secId => {
-      const questions = paper.sections[secId] || [];
+      const questions = getSectionQuestions(paper, secId);
       let correct = 0;
       let attempted = 0;
       questions.forEach((q, i) => {
@@ -833,7 +905,7 @@ const App = (() => {
       totalAttempted += attempted;
     });
 
-    const totalQuestions = state.selectedSections.reduce((sum, secId) => sum + (paper.sections[secId]?.length || 0), 0);
+    const totalQuestions = state.selectedSections.reduce((sum, secId) => sum + getSectionQuestions(paper, secId).length, 0);
     const percentage = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
     const passed = percentage >= EXAM_CONFIG.passingPercent;
 

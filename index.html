@@ -127,10 +127,43 @@
     </div>
   </section>
 
+  <!-- =================== SCREEN 3b: MODE SELECTION =================== -->
+  <section id="mode-screen" class="screen">
+    <div class="screen-header" style="margin-top:20px;">
+      <button class="back-btn" data-back="examtype">← मागे जा</button>
+      <h2>📋 सराव प्रकार निवडा</h2>
+      <p>Choose your practice mode</p>
+    </div>
+    <div class="exam-type-grid" style="max-width:600px; margin:0 auto;">
+      <div class="exam-type-card" id="mode-mock" style="cursor:pointer;">
+        <div class="icon">📝</div>
+        <h3>Mock Test (सराव चाचणी)</h3>
+        <p>Practice with curated mock papers<br>No district selection needed</p>
+        <div class="badge-line" style="background:#F5F0E1; color:#5D4037;">तयारीसाठी सराव</div>
+      </div>
+      <div class="exam-type-card" id="mode-district" style="cursor:pointer;">
+        <div class="icon">📍</div>
+        <h3>District PYQ (जिल्हानिहाय)</h3>
+        <p>Practice previous year papers<br>Select your district & year</p>
+        <div class="badge-line">जिल्हा प्रश्नपत्रिका</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== SCREEN 3c: MOCK PAPER LIST =================== -->
+  <section id="mock-screen" class="screen">
+    <div class="screen-header" style="margin-top:20px;">
+      <button class="back-btn" data-back="mode">← मागे जा</button>
+      <h2>📝 सराव चाचणी निवडा</h2>
+      <p>Select a mock test paper to practice</p>
+    </div>
+    <div class="mock-papers-grid" id="mock-papers-grid"></div>
+  </section>
+
   <!-- =================== SCREEN 4: DISTRICT SELECTION =================== -->
   <section id="district-screen" class="screen">
     <div class="screen-header" style="margin-top:20px;">
-      <button class="back-btn" data-back="examtype">← मागे जा</button>
+      <button class="back-btn" data-back="mode">← मागे जा</button>
       <h2>📍 जिल्हा निवडा</h2>
       <p>Select your district — each district has its unique identity!</p>
     </div>
