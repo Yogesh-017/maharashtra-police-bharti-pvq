@@ -1512,6 +1512,20 @@ const App = (() => {
         console.error('Failed to preload mock paper 2', e);
       }
     }
+    if (!papers['police_bharti_ca_20260310']) {
+      try {
+        const res = await fetch('ca_2026_03_10.json');
+        if (res.ok) {
+          const caPaper = await res.json();
+          if (!caPaper.timestamp) caPaper.timestamp = Date.now();
+          papers['police_bharti_ca_20260310'] = caPaper;
+          saveToStorage('papers', papers);
+          console.log('CA paper 2026-03-10 preloaded.');
+        }
+      } catch (e) {
+        console.error('Failed to preload CA paper 2026-03-10', e);
+      }
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {
