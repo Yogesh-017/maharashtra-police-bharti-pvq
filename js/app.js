@@ -245,9 +245,11 @@ const App = (() => {
     });
 
     $('#mode-district')?.addEventListener('click', () => {
-      state.practiceMode = 'district';
-      renderDistricts();
-      showScreen('district-screen');
+      // Disable routing temporarily until plenty of district QPs are uploaded
+      // state.practiceMode = 'district';
+      // renderDistricts();
+      // showScreen('district-screen');
+      toast('आम्ही लवकरच जिल्हानिहाय प्रश्नपत्रिका जोडत आहोत. तोपर्यंत आपण Mock Test चा आनंद घ्यावा. १-२ दिवसांत District PYQ उपलब्ध होतील. 🙏', 'info');
     });
   }
 
