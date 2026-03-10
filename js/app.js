@@ -1243,12 +1243,6 @@ const App = (() => {
         }
       });
     });
-
-    // Show donation modal after a slight delay
-    setTimeout(() => {
-      const dModal = document.getElementById('donation-modal');
-      if (dModal) dModal.style.display = 'flex';
-    }, 1500);
   }
 
   // --- Admin ---
