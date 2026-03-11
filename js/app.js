@@ -785,6 +785,7 @@ const App = (() => {
       <div class="question-card">
         <div class="question-number">${sec.icon} ${sec.nameEn} — प्रश्न ${state.quiz.currentQuestion + 1} / ${questions.length}${timeStr}</div>
         <div class="question-text">${q.q}</div>
+        ${q.image ? `<div style="text-align:center; margin: 20px 0;"><img src="${q.image}" style="max-width:100%; border-radius: 8px;" alt="Question Image" /></div>` : ''}
         <div class="options-list">
           ${q.options.map((opt, i) => `
             <button class="option-btn${selectedAnswer === i ? ' selected' : ''}" data-idx="${i}">
@@ -1677,6 +1678,20 @@ const App = (() => {
         }
       } catch (e) {
         console.error('Failed to preload mock paper 9', e);
+      }
+    }
+
+    if (!papers['police_bharti_mock_10']) {
+      try {
+        const res = await fetch('mock_10.json');
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers['police_bharti_mock_10'] = mockPaper;
+          saveToStorage('papers', papers);
+          console.log('Mock paper 10 preloaded.');
+        }
+      } catch (e) {
+        console.error('Failed to preload mock paper 10', e);
       }
     }
 
