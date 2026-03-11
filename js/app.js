@@ -1548,6 +1548,17 @@ const App = (() => {
   // --- Preload Test Data ---
   async function preloadTestPaper() {
     const papers = loadFromStorage('papers') || {};
+    
+    // Fix buggy cached mock papers with wrong year
+    if ((papers['police_bharti_mock_10'] && papers['police_bharti_mock_10'].year === 2025) ||
+        (papers['police_bharti_mock_9'] && papers['police_bharti_mock_9'].year === 2025) ||
+        (papers['police_bharti_mock_8'] && papers['police_bharti_mock_8'].year === 2025)) {
+      delete papers['police_bharti_mock_8'];
+      delete papers['police_bharti_mock_9'];
+      delete papers['police_bharti_mock_10'];
+      saveToStorage('papers', papers);
+    }
+
     if (!papers['police_bharti_jalna_2018']) {
       try {
         const res = await fetch('jalna_2026.json');
