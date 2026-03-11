@@ -1680,6 +1680,21 @@ const App = (() => {
         console.error('Failed to preload CA paper 2026-03-10', e);
       }
     }
+
+    if (!papers['police_bharti_ca_20260311']) {
+      try {
+        const res = await fetch('ca_2026_03_11.json');
+        if (res.ok) {
+          const caPaper = await res.json();
+          if (!caPaper.timestamp) caPaper.timestamp = Date.now();
+          papers['police_bharti_ca_20260311'] = caPaper;
+          saveToStorage('papers', papers);
+          console.log('CA paper 2026-03-11 preloaded.');
+        }
+      } catch (e) {
+        console.error('Failed to preload CA paper 2026-03-11', e);
+      }
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {
