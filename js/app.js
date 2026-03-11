@@ -1558,6 +1558,12 @@ const App = (() => {
       delete papers['police_bharti_mock_10'];
       saveToStorage('papers', papers);
     }
+    
+    // Fix buggy thumbnail URLs in mock 10
+    if (papers['police_bharti_mock_10'] && JSON.stringify(papers['police_bharti_mock_10']).includes('thumbnail?id')) {
+      delete papers['police_bharti_mock_10'];
+      saveToStorage('papers', papers);
+    }
 
     if (!papers['police_bharti_jalna_2018']) {
       try {
