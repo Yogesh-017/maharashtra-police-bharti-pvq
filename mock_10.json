@@ -405,7 +405,7 @@
 {
 "id": 64,
 "text": "8 मजूर एक काम 5 दिवसात करतात तर 20 मजूर तेच काम किती दिवसात करतील?",
-"image": "https://drive.google.com/uc?export=view&id=1RUtWluACAV5GSLMM6NAZPF_2S1z1iiMv",
+"image": "images/q64.jpg",
 "options": ["A — 2.5 दिवस", "B — 3.3 दिवस", "C — 2 दिवस", "D — 3 दिवस"],
 "correct": "C — 2 दिवस"
 },
@@ -538,7 +538,7 @@
 {
 "id": 85,
 "text": "सदऱ्याला कोट म्हटले, कोटाला पागोटे म्हटले, पागोट्याला साडी म्हटले, साडीला धोतर म्हटले आणि धोतराला सदरा म्हटले तर डोक्यावर घालण्यासाठी काय वापरायचे?",
-"image": "https://drive.google.com/uc?export=view&id=1hiM-GaL0tZ9O0q33IAl_oIDePw1WBPgr",
+"image": "images/q85.jpg",
 "options": ["A — कोट", "B — पागोटे", "C — साडी", "D — धोतर"],
 "correct": "C — साडी"
 },
@@ -575,7 +575,7 @@
 {
 "id": 91,
 "text": "4 DK चा 15 BI शी जसा संबंध आहे तसा संबंध खालीलपैकी कोणाचा 35 TW शी आहे?",
-"image": "https://drive.google.com/uc?export=view&id=11fHirvLQQmxUw7aWQ-hDdsK0IhpQ_OwF",
+"image": "images/q91.jpg",
 "options": ["A — 8 YU", "B — 6 VY", "C — 30 WT", "D — 7 VW"],
 "correct": "B — 6 VY"
 },

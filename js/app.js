@@ -1560,7 +1560,7 @@ const App = (() => {
     }
     
     // Fix buggy thumbnail URLs in mock 10
-    if (papers['police_bharti_mock_10'] && JSON.stringify(papers['police_bharti_mock_10']).includes('thumbnail?id')) {
+    if (papers['police_bharti_mock_10'] && JSON.stringify(papers['police_bharti_mock_10']).includes('drive.google.com')) {
       delete papers['police_bharti_mock_10'];
       saveToStorage('papers', papers);
     }
