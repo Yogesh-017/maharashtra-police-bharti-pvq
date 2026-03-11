@@ -12,6 +12,7 @@ const App = (() => {
     selectedSections: [],
     timerMode: 'auto', // 'auto' | 'custom' | 'none'
     customTimers: {},
+    donationShown: false,
     quiz: {
       currentSection: null,
       currentQuestion: 0,
@@ -856,7 +857,7 @@ const App = (() => {
     let attemptedQ = 0;
 
     state.selectedSections.forEach(secId => {
-      const qs = paper.sections[secId] || [];
+      const qs = getSectionQuestions(paper, secId);
       totalQ += qs.length;
       qs.forEach((q, i) => {
         if (state.quiz.answers[`${secId}_${i}`] !== undefined) {
@@ -1160,7 +1161,7 @@ const App = (() => {
       const timeStr = secTimeSecs > 0 ? '⌚ ' + mins + 'm ' + secs + 's' : '';
 
       // Build per-question drawer rows
-      const qList = paper?.sections[secId] || [];
+      const qList = getSectionQuestions(paper, secId);
       const drawerRows = qList.map((q, qIdx) => {
         const key = secId + '_' + qIdx;
         const userAns = state.quiz.answers[key];
@@ -1461,10 +1462,24 @@ const App = (() => {
         else goHome();
       });
     });
+
+    $('#donation-close-btn')?.addEventListener('click', () => {
+      $('#donation-modal').style.display = 'none';
+      state.donationShown = true;
+      goHome();
+    });
   }
 
   function goHome() {
     if (state.quiz.timerInterval) clearInterval(state.quiz.timerInterval);
+    
+    // Check if coming from results screen to show donation modal once
+    const isResultsScreen = $('#results-screen')?.classList.contains('active');
+    if (isResultsScreen && !state.donationShown) {
+      $('#donation-modal').style.display = 'flex';
+      return;
+    }
+    
     showScreen('examtype-screen');
     renderHistory();
   }
@@ -1624,6 +1639,33 @@ const App = (() => {
         console.error('Failed to preload mock paper 6', e);
       }
     }
+    if (!papers['police_bharti_mock_7']) {
+      try {
+        const res = await fetch('mock_7.json');
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers['police_bharti_mock_7'] = mockPaper;
+          saveToStorage('papers', papers);
+          console.log('Mock paper 7 preloaded.');
+        }
+      } catch (e) {
+        console.error('Failed to preload mock paper 7', e);
+      }
+    }
+    if (!papers['police_bharti_mock_8']) {
+      try {
+        const res = await fetch('mock_8.json');
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers['police_bharti_mock_8'] = mockPaper;
+          saveToStorage('papers', papers);
+          console.log('Mock paper 8 preloaded.');
+        }
+      } catch (e) {
+        console.error('Failed to preload mock paper 8', e);
+      }
+    }
+
     if (!papers['police_bharti_ca_20260310']) {
       try {
         const res = await fetch('ca_2026_03_10.json');
