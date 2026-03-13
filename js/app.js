@@ -12,7 +12,6 @@ const App = (() => {
     selectedSections: [],
     timerMode: "auto", // 'auto' | 'custom' | 'none'
     customTimers: {},
-    donationShown: false,
     quiz: {
       currentSection: null,
       currentQuestion: 0,
@@ -1812,22 +1811,11 @@ const App = (() => {
       });
     });
 
-    $("#donation-close-btn")?.addEventListener("click", () => {
-      $("#donation-modal").style.display = "none";
-      state.donationShown = true;
-      goHome();
-    });
   }
 
   function goHome() {
     if (state.quiz.timerInterval) clearInterval(state.quiz.timerInterval);
 
-    // Check if coming from results screen to show donation modal once
-    const isResultsScreen = $("#results-screen")?.classList.contains("active");
-    if (isResultsScreen && !state.donationShown) {
-      $("#donation-modal").style.display = "flex";
-      return;
-    }
 
     showScreen("examtype-screen");
     renderHistory();
