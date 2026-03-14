@@ -2129,6 +2129,19 @@ const App = (() => {
         console.error("Failed to preload mock paper 15", e);
       }
     }
+    if (!papers["police_bharti_mock_16"]) {
+      try {
+        const res = await fetch("mock_16.json");
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers["police_bharti_mock_16"] = mockPaper;
+          saveToStorage("papers", papers);
+          console.log("Mock paper 16 preloaded.");
+        }
+      } catch (e) {
+        console.error("Failed to preload mock paper 16", e);
+      }
+    }
     if (!papers["police_bharti_ca_20260310"]) {
       try {
         const res = await fetch("ca_2026_03_10.json");
