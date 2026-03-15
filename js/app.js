@@ -711,6 +711,9 @@ const App = (() => {
     const paper = papers[key];
 
     EXAM_CONFIG.sections.forEach((sec) => {
+      // Agniveer doesn't have Marathi Grammar
+      if (state.examType === "agniveer_army" && sec.id === "marathi") return;
+
       // Map EXAM_CONFIG IDs to possible JSON section IDs
       const idAliases = {
         math: ["math", "ankganit"],
@@ -758,6 +761,17 @@ const App = (() => {
       container.appendChild(card);
     });
 
+    // Handle Agniveer UI exclusions
+    const timerConfig = $(".timer-config");
+    const targetConfig = $$(".timer-config")[1]; // Target Score container
+    if (state.examType === "agniveer_army") {
+      if (timerConfig) timerConfig.style.display = "none";
+      if (targetConfig) targetConfig.style.display = "none";
+    } else {
+      if (timerConfig) timerConfig.style.display = "block";
+      if (targetConfig) targetConfig.style.display = "block";
+    }
+
     // Timer options
     $$('input[name="timer-mode"]').forEach((radio) => {
       radio.addEventListener("change", () => {
@@ -792,7 +806,14 @@ const App = (() => {
 
       // Calculate timers
       const sectionTimers = {};
-      if (state.timerMode === "auto") {
+      if (state.examType === "agniveer_army") {
+        state.timerMode = "auto";
+        const totalAgniveerTime = 60 * 60; // 60 minutes
+        const perSection = Math.floor(totalAgniveerTime / state.selectedSections.length);
+        state.selectedSections.forEach((s) => {
+          sectionTimers[s] = perSection;
+        });
+      } else if (state.timerMode === "auto") {
         const perSection = Math.floor(
           EXAM_CONFIG.totalTime / state.selectedSections.length,
         );
@@ -1194,34 +1215,45 @@ const App = (() => {
   function finishQuiz() {
     if (state.quiz.timerInterval) clearInterval(state.quiz.timerInterval);
     const paper = getPaper();
-    let totalCorrect = 0;
-    let totalAttempted = 0;
+    let totalMarks = 0;
     const sectionResults = {};
 
     state.selectedSections.forEach((secId) => {
       const questions = getSectionQuestions(paper, secId);
       let correct = 0;
       let attempted = 0;
+      let incorrect = 0;
       questions.forEach((q, i) => {
         const ansKey = `${secId}_${i}`;
         if (state.quiz.answers[ansKey] !== undefined) {
           attempted++;
           if (state.quiz.answers[ansKey] === q.answer) correct++;
+          else incorrect++;
         }
       });
-      sectionResults[secId] = { correct, attempted, total: questions.length };
+      
+      let marks = correct; // Default 1 mark
+      if (state.examType === "agniveer_army") {
+        marks = (correct * 2) - (incorrect * 0.5);
+      }
+      
+      sectionResults[secId] = { correct, attempted, total: questions.length, incorrect, marks };
       totalCorrect += correct;
       totalAttempted += attempted;
+      totalMarks += marks;
     });
 
     const totalQuestions = state.selectedSections.reduce(
       (sum, secId) => sum + getSectionQuestions(paper, secId).length,
       0,
     );
-    const percentage =
-      totalQuestions > 0
-        ? Math.round((totalCorrect / totalQuestions) * 100)
-        : 0;
+    
+    let percentage;
+    if (state.examType === "agniveer_army") {
+        percentage = totalQuestions > 0 ? Math.round((totalMarks / (totalQuestions * 2)) * 100) : 0;
+    } else {
+        percentage = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+    }
     const passed = percentage >= EXAM_CONFIG.passingPercent;
 
     // Save to history
@@ -1332,18 +1364,23 @@ const App = (() => {
         ? `<div style="background: linear-gradient(135deg, #FFD700, #FFA000); color: #000; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 1.2rem; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 15px rgba(255,215,0,0.4); animation: pulseGlow 2s infinite;">🎇 अभिनंदन! Congratulations! (Topper Score) 🎇</div>`
         : "";
 
+    const totalPossibleMarks = state.examType === "agniveer_army" ? total * 2 : total;
+    const marksObtained = Object.values(sectionResults).reduce((sum, r) => sum + r.marks, 0);
+
     card.innerHTML = `
       ${congratsBanner}
       <div class="results-score">
         <div class="score-circle" style="border-color:${passed ? "var(--success)" : "var(--danger)"}">
-          <span class="score-num">${correct}</span>
-          <span class="score-total">/ ${total}</span>
+          <span class="score-num">${state.examType === "agniveer_army" ? marksObtained.toFixed(1) : correct}</span>
+          <span class="score-total">/ ${totalPossibleMarks}</span>
         </div>
         <div class="results-status ${passed ? "pass" : "fail"}">${passed ? "🎉 उत्तीर्ण (PASS)" : "❌ अनुत्तीर्ण (FAIL)"}</div>
         <p style="color:var(--text-secondary);margin-top:8px;">${percentage}% — ${attempted} attempted</p>
-        <p style="color:${targetMet ? "var(--gold)" : "var(--text-secondary)"};font-size:0.9rem;margin-top:4px;">
-          🎯 Target: ${state.targetScore}% ${targetMet ? "— Target Met! 🎇" : "— Keep practicing!"}
-        </p>
+        ${state.examType === "agniveer_army"
+        ? `<p style="color:var(--danger); font-size:0.85rem; margin-top:5px;">Negative Marking Applied: -0.5 per wrong answer</p>`
+        : `<p style="color:${targetMet ? "var(--gold)" : "var(--text-secondary)"};font-size:0.9rem;margin-top:4px;">
+             🎯 Target: ${state.targetScore}% ${targetMet ? "— Target Met! 🎇" : "— Keep practicing!"}
+           </p>`}
       </div>
       <div class="results-breakdown" style="max-height: none; overflow-y:visible; padding-right:0;">
         ${state.selectedSections
@@ -1459,9 +1496,7 @@ const App = (() => {
             '<span class="sec-score" style="color:' +
             sec.color +
             '">' +
-            res.correct +
-            "/" +
-            res.total +
+            (state.examType === "agniveer_army" ? res.marks.toFixed(1) + " marks" : res.correct + "/" + res.total) +
             "</span>" +
             "</div>" +
             '<div class="result-bar"><div class="result-bar-fill" style="width:' +
