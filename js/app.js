@@ -274,10 +274,14 @@ const App = (() => {
         state.examType = card.dataset.type;
         const examInfo = EXAM_TYPES.find((e) => e.id === state.examType);
         
-        // For Police Bharti and Agniveer, show mode selection
-        // SRPF currently goes to year-screen (PVQ)
-        if (state.examType === "police_bharti" || state.examType === "agniveer_army") {
+        // For Police Bharti, show mode selection
+        if (state.examType === "police_bharti") {
           showScreen("mode-screen");
+        } else if (state.examType === "agniveer_army") {
+          state.district = "mock";
+          state.practiceMode = "mock";
+          renderMockPapers();
+          showScreen("mock-screen");
         } else {
           renderYears();
           showScreen("year-screen");
@@ -1807,7 +1811,10 @@ const App = (() => {
       btn.addEventListener("click", () => {
         const target = btn.dataset.back;
         if (target === "examtype") showScreen("examtype-screen");
-        else if (target === "mode") showScreen("mode-screen");
+        else if (target === "mode") {
+          if (state.examType === "agniveer_army") showScreen("examtype-screen");
+          else showScreen("mode-screen");
+        }
         else if (target === "district") {
           renderDistricts();
           showScreen("district-screen");
