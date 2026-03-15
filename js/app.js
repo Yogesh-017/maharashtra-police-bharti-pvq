@@ -2255,6 +2255,45 @@ const App = (() => {
         console.error("Failed to preload Agniveer Army mock paper 1", e);
       }
     }
+    if (!papers["agniveer_army_mock_2"]) {
+      try {
+        const res = await fetch("agniveer_bharti/mock_2.json");
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers["agniveer_army_mock_2"] = mockPaper;
+          saveToStorage("papers", papers);
+          console.log("Agniveer Army Mock paper 2 preloaded.");
+        }
+      } catch (e) {
+        console.error("Failed to preload Agniveer Army mock paper 2", e);
+      }
+    }
+    if (!papers["agniveer_army_mock_3"]) {
+      try {
+        const res = await fetch("agniveer_bharti/mock_3.json");
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers["agniveer_army_mock_3"] = mockPaper;
+          saveToStorage("papers", papers);
+          console.log("Agniveer Army Mock paper 3 preloaded.");
+        }
+      } catch (e) {
+        console.error("Failed to preload Agniveer Army mock paper 3", e);
+      }
+    }
+    if (!papers["agniveer_army_mock_4"]) {
+      try {
+        const res = await fetch("agniveer_bharti/mock_4.json");
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers["agniveer_army_mock_4"] = mockPaper;
+          saveToStorage("papers", papers);
+          console.log("Agniveer Army Mock paper 4 preloaded.");
+        }
+      } catch (e) {
+        console.error("Failed to preload Agniveer Army mock paper 4", e);
+      }
+    }
   }
 
   document.addEventListener("DOMContentLoaded", () => {
