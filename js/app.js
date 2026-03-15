@@ -12,6 +12,7 @@ const App = (() => {
     selectedSections: [],
     timerMode: "auto", // 'auto' | 'custom' | 'none'
     customTimers: {},
+    applyNegativeMarking: false,
     quiz: {
       currentSection: null,
       currentQuestion: 0,
@@ -764,12 +765,15 @@ const App = (() => {
     // Handle Agniveer UI exclusions
     const timerConfig = $(".timer-config");
     const targetConfig = $$(".timer-config")[1]; // Target Score container
+    const negToggleContainer = $("#agniveer-negative-marking-container");
     if (state.examType === "agniveer_army") {
       if (timerConfig) timerConfig.style.display = "none";
       if (targetConfig) targetConfig.style.display = "none";
+      if (negToggleContainer) negToggleContainer.style.display = "block";
     } else {
       if (timerConfig) timerConfig.style.display = "block";
       if (targetConfig) targetConfig.style.display = "block";
+      if (negToggleContainer) negToggleContainer.style.display = "none";
     }
 
     // Timer options
@@ -803,6 +807,10 @@ const App = (() => {
         toast("Please select at least one section", "error");
         return;
       }
+
+      // Check negative marking for Agniveer
+      const negToggle = $("#agniveer-neg-toggle");
+      state.applyNegativeMarking = negToggle ? negToggle.checked : false;
 
       // Calculate timers
       const sectionTimers = {};
@@ -1234,7 +1242,7 @@ const App = (() => {
       
       let marks = correct; // Default 1 mark
       if (state.examType === "agniveer_army") {
-        marks = (correct * 2) - (incorrect * 0.5);
+        marks = (correct * 2) - (state.applyNegativeMarking ? (incorrect * 0.5) : 0);
       }
       
       sectionResults[secId] = { correct, attempted, total: questions.length, incorrect, marks };
@@ -1250,7 +1258,8 @@ const App = (() => {
     
     let percentage;
     if (state.examType === "agniveer_army") {
-        percentage = totalQuestions > 0 ? Math.round((totalMarks / (totalQuestions * 2)) * 100) : 0;
+        const maxMarks = totalQuestions * 2;
+        percentage = totalQuestions > 0 ? Math.round((totalMarks / maxMarks) * 100) : 0;
     } else {
         percentage = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
     }
@@ -1377,7 +1386,9 @@ const App = (() => {
         <div class="results-status ${passed ? "pass" : "fail"}">${passed ? "🎉 उत्तीर्ण (PASS)" : "❌ अनुत्तीर्ण (FAIL)"}</div>
         <p style="color:var(--text-secondary);margin-top:8px;">${percentage}% — ${attempted} attempted</p>
         ${state.examType === "agniveer_army"
-        ? `<p style="color:var(--danger); font-size:0.85rem; margin-top:5px;">Negative Marking Applied: -0.5 per wrong answer</p>`
+        ? (state.applyNegativeMarking 
+            ? `<p style="color:var(--danger); font-size:0.85rem; margin-top:5px;">Negative Marking Applied: -0.5 per wrong answer</p>`
+            : `<p style="color:var(--success); font-size:0.85rem; margin-top:5px;">(Practice Mode: No Negative Marking Applied)</p>`)
         : `<p style="color:${targetMet ? "var(--gold)" : "var(--text-secondary)"};font-size:0.9rem;margin-top:4px;">
              🎯 Target: ${state.targetScore}% ${targetMet ? "— Target Met! 🎇" : "— Keep practicing!"}
            </p>`}
