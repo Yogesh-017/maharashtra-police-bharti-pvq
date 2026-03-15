@@ -1870,8 +1870,13 @@ const App = (() => {
           renderDistricts();
           showScreen("district-screen");
         } else if (target === "year") {
-          renderYears();
-          showScreen("year-screen");
+          if (state.district === "mock") {
+            renderMockPapers();
+            showScreen("mock-screen");
+          } else {
+            renderYears();
+            showScreen("year-screen");
+          }
         } else if (target === "section") {
           renderSections();
           showScreen("section-screen");
