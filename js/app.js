@@ -714,6 +714,9 @@ const App = (() => {
     EXAM_CONFIG.sections.forEach((sec) => {
       // Agniveer doesn't have Marathi Grammar
       if (state.examType === "agniveer_army" && sec.id === "marathi") return;
+      
+      // Police Bharti/SRPF doesn't have General Science in this format
+      if (state.examType !== "agniveer_army" && sec.id === "science") return;
 
       // Map EXAM_CONFIG IDs to possible JSON section IDs
       const idAliases = {
@@ -1223,6 +1226,8 @@ const App = (() => {
   function finishQuiz() {
     if (state.quiz.timerInterval) clearInterval(state.quiz.timerInterval);
     const paper = getPaper();
+    let totalCorrect = 0;
+    let totalAttempted = 0;
     let totalMarks = 0;
     const sectionResults = {};
 
