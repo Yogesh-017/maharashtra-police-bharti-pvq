@@ -10,7 +10,8 @@ const EXAM_CONFIG = {
   sections: [
     { id: 'math', name: 'गणित (Mathematics)', nameEn: 'Mathematics', icon: '🔢', questions: 25, color: '#4CAF50' },
     { id: 'gk', name: 'सामान्यज्ञान (GK & Current Affairs)', nameEn: 'GK & Current Affairs', icon: '🌍', questions: 25, color: '#2196F3' },
-    { id: 'reasoning', name: 'बुद्धिमत्ता चाचणी (Reasoning)', nameEn: 'Reasoning', icon: '🧠', questions: 25, color: '#FF9800' },
+    { id: 'science', name: 'सामान्य विज्ञान (General Science)', nameEn: 'General Science', icon: '🔬', questions: 15, color: '#00BCD4' },
+    { id: 'reasoning', name: 'बुद्धिमत्ता (Reasoning)', nameEn: 'Reasoning', icon: '🧠', questions: 25, color: '#FF9800' },
     { id: 'marathi', name: 'मराठी व्याकरण (Marathi Grammar)', nameEn: 'Marathi Grammar', icon: '📖', questions: 25, color: '#9C27B0' }
   ]
 };
@@ -32,6 +33,15 @@ const EXAM_TYPES = [
     icon: '⚔️',
     description: 'राज्य राखीव पोलीस दल भरती',
     descEn: 'State Reserve Police Force Recruitment',
+    hasDistricts: false
+  },
+  {
+    id: 'agniveer_army',
+    name: 'अग्निवीर (Army)',
+    nameEn: 'Agniveer Army Bharti',
+    icon: '🪖',
+    description: 'भारतीय सैन्य अग्निवीर भरती',
+    descEn: 'Indian Army Agniveer Recruitment',
     hasDistricts: false
   }
 ];

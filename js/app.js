@@ -273,14 +273,24 @@ const App = (() => {
       card.addEventListener("click", () => {
         state.examType = card.dataset.type;
         const examInfo = EXAM_TYPES.find((e) => e.id === state.examType);
-        if (examInfo && examInfo.hasDistricts) {
-          // Show mode selection (Mock vs District)
+        
+        // For Police Bharti and Agniveer, show mode selection
+        // SRPF currently goes to year-screen (PVQ)
+        if (state.examType === "police_bharti" || state.examType === "agniveer_army") {
           showScreen("mode-screen");
         } else {
           renderYears();
           showScreen("year-screen");
         }
       });
+    });
+
+    // Main District Button (from examtype-screen)
+    $("#main-district-btn")?.addEventListener("click", () => {
+      state.examType = "police_bharti"; // Default to police bharti for district-wise
+      state.practiceMode = "district";
+      renderDistricts();
+      showScreen("district-screen");
     });
   }
 
@@ -320,9 +330,9 @@ const App = (() => {
     const papers = loadFromStorage("papers") || {};
     const history = loadFromStorage("history") || [];
 
-    // Find all mock papers (keys like police_bharti_mock_1, police_bharti_mock_2, etc.)
+    // Find mocks for current exam type (keys like police_bharti_mock_1, agniveer_army_mock_1, etc.)
     const mockKeys = Object.keys(papers).filter((k) =>
-      k.startsWith("police_bharti_mock_"),
+      k.startsWith(`${state.examType}_mock_`),
     );
 
     if (mockKeys.length === 0) {
@@ -347,7 +357,7 @@ const App = (() => {
         (h) =>
           h.district === "mock" &&
           h.year === paper.year &&
-          h.examType === "police_bharti",
+          h.examType === state.examType,
       );
 
       let statusClass = "unattempted";
@@ -1562,7 +1572,7 @@ const App = (() => {
           district,
           year,
           examType,
-          sections: { math: [], gk: [], reasoning: [], marathi: [] },
+          sections: { math: [], gk: [], science: [], reasoning: [], marathi: [] },
         };
       }
       papers[key].sections[section].push({ q: qText, options: opts, answer });
@@ -1697,7 +1707,7 @@ const App = (() => {
                 year: parseInt(year),
                 examType,
                 timestamp: Date.now(),
-                sections: { math: [], gk: [], reasoning: [], marathi: [] },
+                sections: { math: [], gk: [], science: [], reasoning: [], marathi: [] },
               };
             if (!papers[key].sections[section])
               papers[key].sections[section] = [];
@@ -2090,6 +2100,58 @@ const App = (() => {
         console.error("Failed to preload mock paper 12", e);
       }
     }
+    if (!papers["police_bharti_mock_13"]) {
+      try {
+        const res = await fetch("mock_13.json");
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers["police_bharti_mock_13"] = mockPaper;
+          saveToStorage("papers", papers);
+          console.log("Mock paper 13 preloaded.");
+        }
+      } catch (e) {
+        console.error("Failed to preload mock paper 13", e);
+      }
+    }
+    if (!papers["police_bharti_mock_14"]) {
+      try {
+        const res = await fetch("mock_14.json");
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers["police_bharti_mock_14"] = mockPaper;
+          saveToStorage("papers", papers);
+          console.log("Mock paper 14 preloaded.");
+        }
+      } catch (e) {
+        console.error("Failed to preload mock paper 14", e);
+      }
+    }
+    if (!papers["police_bharti_mock_15"]) {
+      try {
+        const res = await fetch("mock_15.json");
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers["police_bharti_mock_15"] = mockPaper;
+          saveToStorage("papers", papers);
+          console.log("Mock paper 15 preloaded.");
+        }
+      } catch (e) {
+        console.error("Failed to preload mock paper 15", e);
+      }
+    }
+    if (!papers["police_bharti_mock_16"]) {
+      try {
+        const res = await fetch("mock_16.json");
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers["police_bharti_mock_16"] = mockPaper;
+          saveToStorage("papers", papers);
+          console.log("Mock paper 16 preloaded.");
+        }
+      } catch (e) {
+        console.error("Failed to preload mock paper 16", e);
+      }
+    }
     if (!papers["police_bharti_ca_20260310"]) {
       try {
         const res = await fetch("ca_2026_03_10.json");
@@ -2118,6 +2180,21 @@ const App = (() => {
         }
       } catch (e) {
         console.error("Failed to preload CA paper 2026-03-11", e);
+      }
+    }
+
+    // Preload Agniveer Army Mock 1
+    if (!papers["agniveer_army_mock_1"]) {
+      try {
+        const res = await fetch("agniveer_bharti/mock_1.json");
+        if (res.ok) {
+          const mockPaper = await res.json();
+          papers["agniveer_army_mock_1"] = mockPaper;
+          saveToStorage("papers", papers);
+          console.log("Agniveer Army Mock paper 1 preloaded.");
+        }
+      } catch (e) {
+        console.error("Failed to preload Agniveer Army mock paper 1", e);
       }
     }
   }
